@@ -1,0 +1,30 @@
+# 1. GET loginSessionId
+curl -X POST http://localhost:3000/auth/login \
+  -H 'Content-Type: application/json'
+
+{"loginSessionId":"6c8d378b-1496-4cf8-88f5-b4cf841cd006"}
+
+
+# (console logs OTP, OTP : 810128)
+# 2. Verify OTP
+curl -X POST http://localhost:3000/auth/verify-otp \
+  -H 'Content-Type: application/json' \
+  -c cookie.txt \
+  -d '{"loginSessionId":"<PASTE SESSION>","otp":"810128"}'
+
+{"message":"OTP verified"}
+
+
+# 3. Get JWT token
+curl -X POST http://localhost:3000/auth/token \
+  -b cookie.txt \
+  -H 'Content-Type: application/json'
+
+{"token":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzZXNzaW9uSWQiOiI2YzhkMzc4Yi0xNDk2LTRjZjgtODhmNS1iNGNmODQxY2QwMDYiLCJpYXQiOjE3NzA5MjUyNTcsImV4cCI6MTc3MDkyNjE1N30.UQtuCv4ZDNWPevT8esphwjMmcFXL2kPmBirIrBQb54"}
+
+
+# 4. Access protected route
+curl http://localhost:3000/protected \
+  -H "Authorization: Bearer <PASTE TOKEN HERE>"
+
+{"secret":"🎉 You’re inside the protected route!"}
